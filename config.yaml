@@ -1,4 +1,5 @@
 model_list:
+  # --- 模型 1: gpt-oss:120b-cloud 集群設定 ---
   - model_name: "gpt-oss:120b-cloud"
     litellm_params:
       model: "ollama_chat/gpt-oss:120b-cloud"
@@ -7,6 +8,8 @@ model_list:
     litellm_params:
       model: "ollama_chat/gpt-oss:120b-cloud"
       api_base: "http://10.0.0.202:11434"
+
+  # --- 模型 2: qwen3.5:397b-cloud 集群設定 ---
   - model_name: "qwen3.5:397b-cloud"
     litellm_params:
       model: "ollama_chat/qwen3.5:397b-cloud"
@@ -18,20 +21,19 @@ model_list:
 
 general_settings:
   master_key: "sk-1234"
-  database_url: "sqlite:///app/litellm.db"  # ← 關鍵設定
-  
+  database_url: "sqlite:///app/litellm_data/litellm.db"
+
 litellm_settings:
   set_verbose: True
+  # 可選：啟用內存快取（無需 Redis）
   cache: true
   cache_params:
-    type: "redis"
-    host: "redis"
-    port: 6379
-    ttl: 3600
+    type: "local"        # 本地內存快取
+    ttl: 300             # 5 分鐘過期
 
+# 環境變數（在 .env 或 docker-compose 中設置）
 environment_variables:
-  DATABASE_URL: "sqlite:///app/litellm.db"  # ← 環境變數也要設置
-  REDIS_HOST: "redis"
-  REDIS_PORT: "6379"
+  DATABASE_URL: "sqlite:///app/litellm_data/litellm.db"
+  LITELLM_MASTER_KEY: "sk-1234"
   LITELLM_UI_USERNAME: "admin"
-  LITELLM_UI_PASSWORD: "admin123"  # ← 自定義 UI 密碼
+  LITELLM_UI_PASSWORD: "admin123"
